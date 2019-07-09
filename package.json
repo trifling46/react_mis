@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "set port=8088 && set APP_ENV=dev && roadhog server",
+    "build": "set APP_ENV=pro && roadhog build",
+    "lint": "eslint --ext .js src test",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "antd": "^3.14.0",
+    "axios": "^0.18.0",
+    "classnames": "^2.2.6",
+    "dva": "^2.4.1",
+    "dva-loading": "^2.0.6",
+    "dva-model-extend": "^0.1.2",
+    "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.2.0",
+    "react-draggable2": "^0.7.0-alpha1",
+    "throttle-debounce": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-plugin-dva-hmr": "^0.3.2",
+    "babel-plugin-import": "^1.11.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "eslint": "^4.14.0",
+    "eslint-config-umi": "^0.1.1",
+    "eslint-plugin-flowtype": "^2.34.1",
+    "eslint-plugin-import": "^2.6.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "husky": "^0.12.0",
+    "mockjs": "^1.0.1-beta3",
+    "redbox-react": "^1.4.3",
+    "roadhog": "^2.0.0",
+    "roadhog-api-doc": "^1.1.2"
+  }
+}

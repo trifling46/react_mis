@@ -1,0 +1,78 @@
+/* 重置菜单 */
+.z-menus {
+  .ant-menu-inline-collapsed {
+    width: 50px
+  }
+  .ant-menu-inline-collapsed > .ant-menu-item,
+  .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item,
+  .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title,
+  .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title{
+    padding: 0 15px !important;
+  }
+}
+/*重置table*/
+//.ant-table td ,.ant-table th{ white-space: nowrap; }
+.z-list-box{
+  margin:5px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex:auto;
+  flex-direction: column;
+ .z-list{
+    width: 100%;
+    height:calc(~'100% - 40px');
+  /*  .ant-table-wrapper{
+      height:100%;
+      .ant-spin-nested-loading{
+        height:100%;
+        .ant-spin-container{
+          height:100%;
+          .ant-table{
+            height:calc(~'100% - 40px');
+          }
+        }
+      }
+    }*/
+  }
+  .z-btn-group{
+    margin:0 0 10px
+  }
+  .no-btn-group{
+    height:100%
+  }
+  .table-col-btn{
+    margin: 0 2px;
+    color: #409eff;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    &:hover{
+      color:#66b1ff
+    }
+  }
+}
+
+/*弹框*/
+.ant-modal{
+  .ant-modal-footer button + button{
+    margin-left:15px
+  }
+  .ant-modal-header{
+    background-color: #4db3ff;
+    padding: 8px 12px;
+    .ant-modal-title{
+      color: #ffffff;
+    }
+  }
+  .ant-modal-close-x{
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #ffffff;
+    margin-top: 5px;
+    margin-right: 8px;
+  }
+}
+
