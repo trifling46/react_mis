@@ -1,6 +1,9 @@
 /**
  * Created by Administrator on 2019-03-13.
  */
-import 'src/models/public/user'
-import 'tabsBar'
-import 'manageArea'
+import tabBar from './tabsBar'
+import manageArea from './manageArea'
+export default [
+  tabBar,
+  manageArea
+]

@@ -3,8 +3,8 @@ import {Menu,Icon} from 'antd';
 import {connect} from 'dva'
 import './index.less'
 import propTypes from 'prop-types'
-import {getMenus} from '../../services/common'
-import {routerRedux,withRouter } from 'dva/router'
+import {getFlatRouteArr, getMenus} from '../../config/constant'
+import {withRouter } from 'dva/router'
 
 class Menus extends React.Component {
   constructor (props) {
@@ -12,57 +12,106 @@ class Menus extends React.Component {
     this.state = {
       defaultSelectedKeys: [],
       defaultOpenKeys: [],
-      menus:[],
-      childrenMenus:[]
+      menus:getMenus(),
+      childrenMenus:[],
+      menuOpenKeys:[]
     }
+    this.state.childrenMenus = this.getMenuTree(this.state.menus)
+    console.log('constructor menu')
   }
-  componentWillMount(){
-    getMenus().then(res =>{
-      this.setState(()=> {return {menus:res.data.menus}})
-    })
-  }
+  /**
+   * 菜单 menu.item click
+   * @param item
+   * @param key
+   * @param keyPath
+   */
   handlerClickMenu = ({ item, key, keyPath })=>{
-    this.props.history .push({
+    this.props.history.push({
       pathname:item.props.path,
     })
   }
-  handlerClickSubMenu=(openKeys)=>{
-    const latestOpenKey = openKeys.find(key => this.props.tabsBar.menuOpenKeys.indexOf(key) === -1)
-    let    parentKeys = latestOpenKey ? [latestOpenKey] : []
-    this.props.dispatch({
-      type:'tabsBar/updateOpenKeys',
-      payload:parentKeys
-    });
+  /**
+   * 菜单 menu.submenu click
+   * @param key
+   */
+  handlerClickSubMenu=({ key})=>{
+    let menuOpenKeys = [...this.state.menuOpenKeys]
+    if(menuOpenKeys.includes(key)){
+      menuOpenKeys.splice(menuOpenKeys.indexOf(key),1)
+    }else{
+      menuOpenKeys.push(key)
+    }
+    this.setState({
+      menuOpenKeys:menuOpenKeys
+    })
   }
+  /**
+   * 构建 菜单
+   * @param menus
+   * @returns {Array|*|Uint8Array | BigInt64Array | any[] | Float64Array | Int8Array | Float32Array | Int32Array | Uint32Array | Uint8ClampedArray | BigUint64Array | Int16Array | Uint16Array}
+   */
   getMenuTree = (menus)=>{
     if(this.state.childrenMenus.length>0){
       return this.state.childrenMenus
     }else{
       return  menus.map(item=>{
         if(item.children && item.children.length>0){
-          return <Menu.SubMenu title={<span><Icon type="mail" /><span>{item.name}</span></span>} key={item.id} >{this.getMenuTree(item.children)}</Menu.SubMenu>
+          return <Menu.SubMenu onTitleClick={this.handlerClickSubMenu} title={<span><Icon type="mail" /><span>{item.title}</span></span>} key={item.id.toString()} >{this.getMenuTree(item.children)}</Menu.SubMenu>
         }else{
-          return <Menu.Item key={item.id} title={item.name} path={item.path} ><Icon type="mail"/><span>{item.name}</span></Menu.Item>
+          return <Menu.Item key={item.id.toString()} title={item.title} path={item.path} ><Icon type="mail"/><span>{item.title}</span></Menu.Item>
         }
       })
     }
   }
+
+  /**
+   * 展开 activeViewKey  对应父级菜单
+   * @param id
+   */
+  getMenuOpenKeys(id,menuPKeys){
+    let flatRouteArr = getFlatRouteArr()
+    for(let i=0;i<flatRouteArr.length;i++){
+      if(flatRouteArr[i].id === id){
+        let key = flatRouteArr[i].id.toString()
+        if(!this.state.menuOpenKeys.includes(key)){
+          menuPKeys.push(key)
+        }
+        if(flatRouteArr[i].pId !== 0){this.getMenuOpenKeys(flatRouteArr[i].pId,menuPKeys)}
+      }
+    }
+  }
   render () {
-    let tpl =  this.getMenuTree(this.state.menus)
-    let openKeys = this.props.collapsed ? []: this.props.tabsBar.menuOpenKeys
-    return (
+    console.log('render menus')
+    let menuPKeys = []
+    this.getMenuOpenKeys(this.props.activeViewKey,menuPKeys)
+    let menuOpenKeys = [...menuPKeys,...this.state.menuOpenKeys]
+    // 收缩后的菜单 不能指定openKeys
+    if(this.props.collapsed){
+      return (
         <Menu
-          openKeys={openKeys}
-          selectedKeys={[this.props.tabsBar.activeViewKey]}
+          selectedKeys={[this.props.activeViewKey.toString()]}
           mode="inline"
           theme="dark"
           inlineCollapsed={this.props.collapsed}
           onClick={this.handlerClickMenu}
-          onOpenChange={this.handlerClickSubMenu}
         >
-          {tpl}
+          {this.state.childrenMenus}
         </Menu>
-    )
+      )
+    }else{
+      return (
+        <Menu
+          selectedKeys={[this.props.activeViewKey.toString()]}
+          openKeys={menuOpenKeys}
+          mode="inline"
+          theme="dark"
+          inlineCollapsed={this.props.collapsed}
+          onClick={this.handlerClickMenu}
+        >
+          {this.state.childrenMenus}
+        </Menu>
+      )
+    }
   }
 }
 
@@ -70,4 +119,6 @@ Menu.propTypes = {
   menus: propTypes.array,
   collapsed: propTypes.bool
 }
-export default withRouter (connect(({tabsBar})=>{return {tabsBar}})(Menus))
+export default withRouter (connect(({tabsBar})=>{return {
+  activeViewKey:tabsBar.activeViewKey
+}})(Menus))

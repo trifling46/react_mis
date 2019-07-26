@@ -8,10 +8,11 @@ class Index extends React.Component {
     return (
         <svg className={classNames('icon',this.props.iconClass)} aria-hidden="true" style={this.props.style}>
           <use xlinkHref={iconName}></use>
-        </svg>
+         </svg>
      )
   }
 }
+
 Index.propTypes = {
   iconName:propTypes.string.isRequired,
   iconClass:propTypes.string

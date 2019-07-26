@@ -8,9 +8,10 @@ const proxy = {
   // GET POST 可省略
   'GET /api/userInfo':Mock.mock({
     data: {
-      'fullName': '@name',
-      'depName':'用户体验部',
+      'fullName': '张三',
+      'deptName':'用户体验部',
       'orgCode': 100,
+      'nodeName':200,
       'permissions':[111,222,333]
     }, // 数据集
     status: true, // 数据状态

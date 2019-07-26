@@ -1,8 +1,8 @@
-import React from "react"
-import {connect} from 'dva'
-import {Form,Button ,Col,Row} from 'antd';
-import SelectManageArea from '../../components/SelectManageArea'
-import SelectSite from '../../components/SelectSite'
+import React from "_react@16.8.6@react"
+import {connect} from '_dva@2.4.1@dva/index'
+import {Form,Button ,Col,Row} from '_antd@3.20.1@antd/lib/index';
+import SelectManageArea from '../../../components/SelectManageArea'
+import SelectSite from '../../../components/SelectSite'
 
 class QueryCondition extends React.Component {
   constructor (props){

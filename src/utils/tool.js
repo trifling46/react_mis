@@ -2,21 +2,6 @@
  * Created by Administrator on 2019-03-07.
  */
 /**
- * 获取权限 路由 映射
- * @param routes
- * @returns {{}}
- */
-function getPermissionByRoute (routes) {
-  let roles = {}
-  for(let i=0;i<routes.length;i++){
-     roles[routes[i].path] = routes[i].roles
-    if(routes[i].children &&routes[i].children.length>0){
-      Object.assign(roles,getPermissionByRoute(routes[i].children))
-    }
-  }
-  return roles
-}
-/**
  * 验证路由权限
  * @param roles
  * @param permissions
@@ -36,7 +21,7 @@ function getPermissionByRoute (routes) {
   return _pass
 }
 /**
- * 根据 path 查找对应路由表
+ * 根据 path 查找对应路由表 ,只查询叶子节点
  * @param routes
  * @param path
  * @returns {*}
@@ -49,7 +34,7 @@ function getRouteByPath (routes,path) {
       if(result){
         return result
       } else {
-        continue ;
+        continue
       }
     } else {
       if (item.path === path){
@@ -66,7 +51,7 @@ function getRouteByPath (routes,path) {
  */
 function getIndexByRoutes (routes,route) {
   for(let i=0;i<routes.length;i++){
-    if(routes[i].key === route.key){
+    if(routes[i].id === route.id){
       return i
     }
   }
@@ -78,15 +63,14 @@ function getIndexByRoutes (routes,route) {
  * @param key
  * @returns {*}
  */
-function getRouteByKey (routes,key) {
+function getRouteByKey (routes,id) {
   for(let i=0;i<routes.length;i++){
-    if(routes[i].key == key){ // 弱类型比较 number string , 防止格式化number
+    if(routes[i].id === id){
       return routes[i]
     }
   }
 }
 export {
-  getPermissionByRoute,
   passRouter,
   getRouteByPath,
   getIndexByRoutes,

@@ -1,8 +1,8 @@
-import React from "react"
+import React from "_react@16.8.6@react"
 import './index.less'
 import QueryCondition from './QueryCondition'
 import List from './List'
-class Index extends React.Component {
+class BelongToArea extends React.Component {
   constructor (props){
     super(props)
     this.listRef = React.createRef()
@@ -21,4 +21,4 @@ class Index extends React.Component {
 	)
   }
 }
-export default Index
+export default BelongToArea

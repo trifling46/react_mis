@@ -1,22 +1,16 @@
 import React from 'react'
-import { Router, Route, Switch ,routerRedux} from 'dva/router'
-import dynamic from 'dva/dynamic'
-import routes from '../router/routes'
+import { routerRedux,Switch,Route } from 'dva/router'
 import {LocaleProvider } from 'antd'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
+import {buildRouteDom} from '../utils/routeDom'
 
 const { ConnectedRouter } = routerRedux;
+let routes = buildRouteDom(1)
 function RouterConfig({ app,history }) {
   return (
     <LocaleProvider locale={zh_CN}>
     <ConnectedRouter history={history}>
-      <Switch>
-        {
-          routes.map(item=>{
-            return <Route  path={item.path} component={dynamic({app, models: item.models, component: item.component})} key={item.key}/>
-          })
-        }
-      </Switch>
+      {routes}
     </ConnectedRouter>
     </LocaleProvider>
   );

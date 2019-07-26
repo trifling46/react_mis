@@ -1,6 +1,6 @@
-import React from "react"
-import {connect} from  'dva'
-import {Table,Button} from 'antd'
+import React from "_react@16.8.6@react"
+import {connect} from '_dva@2.4.1@dva/index'
+import {Table,Button} from '_antd@3.20.1@antd/lib/index'
 import EditRow from './EditRow'
 class List extends React.Component {
   constructor (props){

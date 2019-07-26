@@ -8,7 +8,7 @@ export default {
   extraResolveExtensions:['.js','.jsx', '.less', '.json'],
   html: {
     title:'管理信息系统',
-    template: './src/index.ejs',
+    template: './src/template/index.ejs',
     favicon:'./src/assets/favicon.ico',
     filename:'index.html',
     hash:true,

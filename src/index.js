@@ -4,22 +4,25 @@ import 'normalize.css/normalize.css' // 解决游览器之间的差异
 import './styles/restAntd.less'
 import './styles/common.less'
 import './styles/fonts/iconfont'
-import {setApp} from './config/constant'
+import {setApp,getMenus} from './config/constant'
 import {init} from './utils/init'
+import models from './models/public'
 
-init()
-// 1. Initialize
-const app = dva();
 
+init().then(res=>{
+  // 1. Initialize
+  const app = dva();
 // 3. Model
-app.model(require('./models/public/user').default);
-app.model(require('./models/public/manageArea').default);
-app.model(require('./models/public/tabsBar').default);
-app.model(require('./models/public/spin').default);
+
+  models.map(item=>{
+    app.model(item)
+  })
 // 4. Router
-app.router(require('./router/router').default);
+  app.router(require('./router').default);
 
 // 5. Start
-app.start('#root');
+  app.start('#root');
 
-setApp(app)
+  setApp(app)
+})
+

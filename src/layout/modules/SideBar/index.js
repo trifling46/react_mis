@@ -6,18 +6,15 @@ import PropTypes  from 'prop-types'
 class SideBar extends React.Component {
   constructor (props){
     super(props)
-    this.state = {
-      menuStatusIcon:'left',
-      menuWidth:'180px',
-      menus:[]
-    }
   }
 
   render () {
+    let menuWidth = this.props.collapsed ? '50px':'180px'
+    let menuLogo = this.props.collapsed ? "/src/assets/layout/logo-min.png" : "/src/assets/layout/logo-max.png"
     return (
-      <div className="z-menus" style={{width:this.state.menuWidth}}>
+      <div className="z-menus" style={{width:menuWidth}}>
         <div className="logo">
-          <img src="/src/assets/layout/logo.png" alt="logo"/>
+          <img src={menuLogo} alt="logo"/>
         </div>
         <div className="z-menus-box" >
           <Menu  collapsed={this.props.collapsed} />

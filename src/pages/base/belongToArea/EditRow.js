@@ -1,9 +1,9 @@
 import React from "react"
-import { Modal, Button ,Form ,Col,Row,Input,message} from 'antd';
-import PropTypes  from 'prop-types'
-import SelectSite from '../../components/SelectSite'
-import {debounce} from 'throttle-debounce'
-import {connect} from 'dva'
+import { Modal, Button ,Form ,Col,Row,Input,message} from '_antd@3.20.1@antd/lib/index';
+import PropTypes  from '_prop-types@15.7.2@prop-types'
+import SelectSite from '../../../components/SelectSite'
+import {debounce} from '_throttle-debounce@2.1.0@throttle-debounce'
+import {connect} from '_dva@2.4.1@dva/index'
 const { TextArea } = Input;
 class EditRow extends React.Component {
   constructor (props){

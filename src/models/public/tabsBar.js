@@ -1,54 +1,43 @@
 /**
  * Created by Administrator on 2019-03-07.
  */
+
+/**
+ * activeView 更新由redux管理
+ */
 import {getRouteByPath,getIndexByRoutes,getRouteByKey} from '../../utils/tool'
-import routes from  '../../router/routes'
+import { getRoutes} from "../../config/constant"
+import {routerRedux} from 'dva/router'
+
+
 export default {
   namespace: 'tabsBar',
 
   state: {
-    menuOpenKeys:[],
-    activeViewKey:'',
-    visitedViews:[],
-    defaultViews: [
-      {
-        path: '/welcome', // 路由路径   必须和routes中的对应
-        title: '首页', // 展示的标题
-        name: 'welcome', // tab对应的别名
-        key: '-1', // 只为高效率渲染
-        closable: false // welcome 页面不支持关闭
-      }
-    ]
+    activeViewKey: -1, // 激活的 菜单、tab
+    visitedViews: [],  // 访问视图
+    defaultViews: ['/welcome']  // 默认视图 通过默认path自动生成visitedViews
   },
 
   subscriptions: {
-    routePath({ dispatch, history }) {  // eslint-disable-line
-      history.listen(({pathname})=>{
-        let route =  getRouteByPath(routes,pathname)
-        if(route){
+    routePath({dispatch, history}) {  // eslint-disable-line
+      history.listen(({pathname}) => {
+        let route = getRouteByPath(getRoutes(), pathname)
+        if (route) {
           dispatch({
-            type:'addVisitedView',
+            type: 'addVisitedView',
             payload: {
               path: route.path,
               title: route.title,
-              name: route.title,
-              key: route.key,
-              parentKeys:route.parentKeys,
-              cache:route.cache,
+              id: route.id,
+              pId: route.pId,
+              cache: route.cache,
               closable: route.closable
             }
-          });
-          dispatch({
-            type:'updateActiveViewKey',
-            payload:route.key
-          });
-        }else if(pathname === '/'){
-          history.push({
-            pathname:'/page/belongToArea'
           })
-        }else if(pathname !== '/404'){
-          history.push({
-            pathname:'/404'
+          dispatch({
+            type: 'updateActiveViewKey',
+            payload: route.id
           })
         }
       })
@@ -56,56 +45,70 @@ export default {
   },
 
   effects: {
-    *updateActiveViewKey({payload},{call,put,select}){// eslint-disable-line
-      let visitedViews =  yield select(state => state.tabsBar.visitedViews)
-      let route = getRouteByKey(visitedViews,payload )
-      route.parentKeys = route.parentKeys instanceof Array ? route.parentKeys:[]
-      let parentKeys = route.parentKeys.map(item => item )
-
+    * updateActiveViewKey({payload}, {call, put, select}) {// eslint-disable-line
       yield put({
-        type:'updateActiveKey',
-        payload:payload
-      })
-      yield put({
-        type:'updateMenuOpenKeys',
-        payload:parentKeys
+        type: 'updateActiveKey',
+        payload: payload
       })
     },
-    *updateOpenKeys({payload},{call,put,select}){// eslint-disable-line
-      yield put({
-        type:'updateMenuOpenKeys',
-        payload:payload
-      })
-    },
-    *addVisitedView({payload,payloadIndex},{call,put,select }){ // eslint-disable-line
-      let visitedViews =  yield select(state => state.tabsBar.visitedViews)
-      let index  = getIndexByRoutes(visitedViews,payload)
-      if(index === -1){
-        let newVisitedView = [...visitedViews]
-        if(payloadIndex !==undefined){
-          newVisitedView.splice(payloadIndex,0,payload)
-        }else {
-          newVisitedView.push(payload)
-        }
-        yield  put({
-          type:'updateVisitedView',
-          payload:newVisitedView
-        })
-      }
-    },
-    *delVisitedView({payload = []},{call,put,select}){ // eslint-disable-line
-      let visitedViews =  yield select(state => state.tabsBar.visitedViews)
-      let newVisitedViews = [...visitedViews]
-      payload.forEach(item=>{
-        let index = getIndexByRoutes(newVisitedViews,item)
-        newVisitedViews.splice(index,1)
-      })
+    * addDefaultView({payload}, {call, put, select}) { // eslint-disable-line
+      let visitedViews = yield select(state => state.tabsBar.visitedViews)
+      let newVisitedView = [...payload, ...visitedViews]
       yield  put({
-        type:'updateVisitedView',
-        payload:newVisitedViews
+        type: 'updateVisitedView',
+        payload: newVisitedView
+      })
+    },
+  /**
+   * 新增 tab
+   * @param payload
+   * @param call
+   * @param put
+   * @param select
+   * @returns {IterableIterator<*>}
+   */* addVisitedView({payload}, {call, put, select}) { // eslint-disable-line
+    let visitedViews = yield select(state => state.tabsBar.visitedViews)
+    let index = getIndexByRoutes(visitedViews, payload)
+    if (index === -1) {
+      let newVisitedView = [...visitedViews]
+      newVisitedView.push(payload)
+      yield  put({
+        type: 'updateVisitedView',
+        payload: newVisitedView
       })
     }
   },
+  /**
+   * 删除 指定 tab
+   * @param payload
+   * @param call
+   * @param put
+   * @param select
+   * @returns {IterableIterator<*>}
+   */* delVisitedView({payload}, {call, put, select}) { // eslint-disable-line
+    let visitedViews = yield select(state => state.tabsBar.visitedViews)
+    let newVisitedViews = [...visitedViews]
+    let index = getIndexByRoutes(newVisitedViews, payload)
+    newVisitedViews.splice(index, 1)
+    yield  put({
+      type: 'updateVisitedView',
+      payload: newVisitedViews
+    })
+
+    // 手动跳转路由 会自动激活相应的tab
+    let activeViewKey = yield select(state => state.tabsBar.activeViewKey)
+    let route = getRouteByKey(visitedViews,activeViewKey)
+    let activeIndex = getIndexByRoutes(newVisitedViews, route)
+    if(activeIndex>index){ // 激活元素在删除元素右侧
+      activeViewKey = activeIndex -1
+    }else if(activeIndex<index && activeIndex > -1){// 激活元素在删除元素左侧
+      activeViewKey = activeViewKey
+    }else { // 删除激活元素
+      activeIndex = index === newVisitedViews.length ? index - 1 : index
+    }
+    yield put( routerRedux.push({pathname: newVisitedViews[activeIndex].path}))
+  }
+ },
 
   reducers: {
     updateVisitedView(state, {payload}) {
@@ -114,9 +117,6 @@ export default {
     updateActiveKey(state,{payload}){
       return { ...state, ...{activeViewKey:payload}};
     },
-    updateMenuOpenKeys(state, {payload}){
-      return {...state, ...{menuOpenKeys:payload}}
-    }
   },
 
-};
+}
