@@ -1,3 +1,7 @@
+/**
+ * 页面视图 路由
+ * @type {*[]}
+ */
 let pageRoutes = [
   {
     path:'/welcome',
@@ -24,6 +28,7 @@ let pageRoutes = [
         path:'/base/siteSearch', // 必须， 一级路由的渲染 来源也再此  必须
         component:()=>import('../../pages/base/siteSearch'), // 此路由对应加载组件 必须
         title: '网点查询', // 标题 必须
+        name:'siteSearch',
         cache: true, // 是否缓存
         closable: true, // 是否标签可关闭
         roles:['222','333'] // （route 标签没有类似vue-router meta 额外参数信息 ）
@@ -77,6 +82,7 @@ let pageRoutes = [
         component:()=>import('../../pages/approve/todoList'),
         title: '代办事项',
         cache: true,
+        name:'todoList',
         closable: true,
         roles:['111']
       },
@@ -84,6 +90,7 @@ let pageRoutes = [
         path:'/approve/finishList',
         component:()=>import('../../pages/approve/finishList'),
         title: '已办事项',
+        name:'finishList',
         cache: true,
         closable: true,
       },

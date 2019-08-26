@@ -41,7 +41,6 @@ function buildRouteDom(level=1) {
     route.path = paths
     levelRoutes.unshift(route)
   }
-  console.log(levelRoutes)
   let routeDom =  levelRoutes.map(item=>{
     return <Route  path={item.path} component={dynamic({app, models: item.models, component: item.component})} key={item.id}/>
   })

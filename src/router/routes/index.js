@@ -7,7 +7,8 @@
  */
 
 /**
- * path:       string          路由路径
+ * path        string          路由路径
+ * name        string          组件名与路由名需同名（缓存组件必填项）
  * title       string          标题
  * component   function        路由组件 （layout为true 可不填）
  * layout      boolean         启用layout布局  默认true（true:一级路由 统一route 渲染 layout)

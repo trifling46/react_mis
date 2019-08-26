@@ -1,15 +1,12 @@
 import { Form, Icon, Input, Button } from 'antd';
 import React from "react"
+import WithCacheRoute from '../../../components/CacheRoute/index'
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
 class HorizontalLoginForm extends React.Component {
-  componentDidMount() {
-    // To disabled submit button at the beginning.
-    this.props.form.validateFields();
-  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -59,5 +56,4 @@ class HorizontalLoginForm extends React.Component {
   }
 }
 
-export  default Form.create({ name: 'horizontal_login' })(HorizontalLoginForm);
-
+export  default WithCacheRoute('siteSearch')(Form.create({ name: 'horizontal_login' })(HorizontalLoginForm))

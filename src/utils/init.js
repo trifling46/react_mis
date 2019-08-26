@@ -44,6 +44,7 @@ function preRouteArr(routes, pId,level) {
       pId: pId,
       path:v.path,
       title: v.title,
+      name:v.name,
       roles: v.roles,
       hiddenMenu: typeof v.hiddenMenu === 'boolean' ? v.hiddenMenu:false,
       hiddenRoute:typeof v.hiddenRoute === 'boolean' ? v.hiddenRoute:false,
@@ -117,8 +118,6 @@ function initRouteAndMenus() {
   setMenus(validMenus)
   setRoutes(validRoutes)
   setFlatRouteArr(routeArr)
-  console.log(validRoutes)
-  console.log(validMenus)
 }
 
 /**

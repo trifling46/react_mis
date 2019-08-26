@@ -1,3 +1,7 @@
+/**
+ * 公共路由
+ * @type {*[]}
+ */
 let commonRoutes = [
   {
     path:'/403',

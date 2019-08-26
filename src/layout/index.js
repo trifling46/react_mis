@@ -4,7 +4,8 @@ import Header from './modules/Header'
 import SideBar from './modules/SideBar'
 import TabsBar from './modules/TabsBar'
 import {buildRouteDom} from '../utils/routeDom'
-
+import {Provider} from "react-keep-alive"
+import {connect} from 'dva'
 
 class Layout extends React.Component {
   constructor (props) {
@@ -14,7 +15,6 @@ class Layout extends React.Component {
       collapsed: false,
     }
     this.routes =  buildRouteDom(2)
-    console.log(this.routes)
   }
   handlerToggleMenu = ()=>{
     this.setState({
@@ -22,6 +22,7 @@ class Layout extends React.Component {
     });
   }
   render () {
+    console.log('render layout')
     return (
         <div className="z-body">
             <SideBar collapsed={this.state.collapsed}/>
@@ -29,13 +30,15 @@ class Layout extends React.Component {
               <Header handlerToggleMenu={this.handlerToggleMenu} collapsed={this.state.collapsed}/>
               <div className="z-content-box">
                 <div className="z-tab"><TabsBar/></div>
-                <div className="z-page">
-                  {this.routes}
-                </div>
+                <Provider include={this.props.cacheViews}>
+                  <div className="z-page">
+                     {this.routes}
+                  </div>
+                </Provider>
               </div>
             </div>
         </div>
     )
   }
 }
-export default Layout
+export default connect(({tabsBar})=>{return {cacheViews:tabsBar.cacheViews}})(Layout)
