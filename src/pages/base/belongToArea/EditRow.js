@@ -1,5 +1,5 @@
 import React from "react"
-import { Modal, Button ,Form ,Col,Row,Input,message} from '_antd@3.20.1@antd/lib/index';
+import { Modal, Button ,Form ,Col,Row,Input,message} from 'antd';
 import PropTypes  from '_prop-types@15.7.2@prop-types'
 import SelectSite from '../../../components/SelectSite'
 import {debounce} from '_throttle-debounce@2.1.0@throttle-debounce'
